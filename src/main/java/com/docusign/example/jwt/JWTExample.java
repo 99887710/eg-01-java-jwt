@@ -65,6 +65,8 @@ public class JWTExample {
                         "\nAlternatively, an Administrator can use Organization Administration to" +
                         "\npre-approve one or more users.");
             } else {
+                e.printStackTrace();
+                System.err.println(String.format("    Reason1: %s", message));
                 System.err.println(String.format("    Reason: %d", e.getCode()));
                 System.err.println(String.format("    Error Reponse: %s", e.getResponseBody()));
             }
