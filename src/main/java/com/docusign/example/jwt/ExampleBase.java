@@ -23,6 +23,7 @@ public class ExampleBase {
     private static String _token = null;
     protected final ApiClient apiClient;
 
+
     protected static String getAccountId() {
         return _account.getAccountId();
     };
@@ -46,8 +47,12 @@ public class ExampleBase {
         // Only signature scope is needed. Impersonation scope is implied.
         scopes.add(OAuth.Scope_SIGNATURE);
         String privateKey = DSConfig.PRIVATE_KEY.replace("\\n","\n");
+        System.out.println(privateKey);
         byte[] privateKeyBytes = privateKey.getBytes();
         apiClient.setOAuthBasePath(DSConfig.DS_AUTH_SERVER);
+
+        System.out.println(apiClient.getJWTUri(DSConfig.CLIENT_ID, "http://localhost:8080",DSConfig.DS_AUTH_SERVER)
+        );
 
         OAuth.OAuthToken oAuthToken = apiClient.requestJWTUserToken (
                 DSConfig.CLIENT_ID,
@@ -57,6 +62,9 @@ public class ExampleBase {
                 TOKEN_EXPIRATION_IN_SECONDS);
         apiClient.setAccessToken(oAuthToken.getAccessToken(), oAuthToken.getExpiresIn());
         System.out.println("Done. Continuing...\n");
+
+//        System.out.println(apiClient.generateAccessToken(DSConfig.CLIENT_ID, privateKey, "eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQkAAAABAAYABwAAl9Dsb2bWSAgAACNXNHBm1kgCAEhUkmY-4NNLsGnNocdTok0VAAEAAAAYAAIAAAAFAAAAHQAAAA0AJAAAADhjZTI5Njc5LTYyYjItNDY5Mi1hYjNiLTEwZDg1NTA4ZDFlOTAAAJfQ7G9m1kgSAAEAAAALAAAAaW50ZXJhY3RpdmU.FtNP4Q-HedYYKGX7YfRkTUr1zE6TpAx6wP87D2nRCFzUyJGefP8xHs7-Pob_p3a4WDDWTfWdKE6VyEYhRWV3dUdXRVYbder6eBBf4uOpJ1IRGNrgv3YN-UWkPl76trTMTZLoyacrQ38zslhNoTWnsXQo6Gdjt-7z0KCAl46x8F1jSOludR9uqupnrsp42-gZXrzLy8dbE-LXfaMDeuc4ullQEMpgtkfaZhvl_xvv9FXGZsxYcwPtJhKE_TFRySZLHDNU7YPjbMNzZjfbKHx0kW5ucIwL-ZViFh1cQP_bb4x0aHKaQw-tvJRLKIH_3wEiqDh8_h4wwIR8gIzmYFkWSw"));
+        System.out.println("access token: "+ apiClient.getAccessToken());
 
         if(_account == null)
             _account = this.getAccountInfo(apiClient);
